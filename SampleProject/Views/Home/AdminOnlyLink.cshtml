@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "MyTube - Admin Panel";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    <div class="jumbotron">
+        <h1>Upload Files </h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6 text-right">
+            <input style="display:inline; border: 1px solid #b1b1b1; padding: 1px" type="file" name="postedFile" required />
+
+        </div>
+        <div class="col-md-3 text-left">
+            <input type="submit" class="btn btn-success" id="btnUpload" value="Upload" />
+        </div>
+    </div>
+
+    }
+    <hr />
+
+</body>
+</html>

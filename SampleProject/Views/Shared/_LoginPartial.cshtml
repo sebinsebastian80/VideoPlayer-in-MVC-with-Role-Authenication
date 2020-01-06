@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class=" nav navbar-nav ">
+            @if (Convert.ToInt32(this.Session["role_id"]) == 1)
+            {
+            <li>
+                <a href="@Url.Action("Index","Upload")" title="Upload new Videos"><span class="glyphicon glyphicon-plus-sign">UploadVideo</span></a>
+              
+            </li>
+            }
+            <li>
+                <a href="@Url.Action("Index","Home")" title="Manage"><span class="glyphicon glyphicon-user">Hello @User.Identity.Name </span></a>
+
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log Off</a></li>
+        </ul>
+
+    }
+}
+else
+{
+    <ul class="nav navbar-nav ">
+        <li><a href="@Url.Action("Register", "Account")"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="@Url.Action("Login", "Account")"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+    </ul>
+}
+   

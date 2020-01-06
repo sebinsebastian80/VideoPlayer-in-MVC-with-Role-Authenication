@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "MyTube - Home";
+}
+
+<link href="~/Content/Style.css" rel="stylesheet" />
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".VideoPlayer").mouseenter(function (element) {
+           
+            $('#' + element.target.id)[0].play();
+        })
+        $(".VideoPlayer").mouseleave(function (element) {
+           
+            $('#' + element.target.id)[0].pause();
+        })
+        $(".vidpause").click(function (element) {
+
+            $(element.target.parentElement.parentElement.parentElement).find('.VideoPlayer')[0].pause()
+        })
+        $('.modal-content').resizable({
+        alsoResize: ".modal-dialog",
+        minHeight: 300,
+        minWidth: 300
+    });
+    $('.modal-dialog').draggable();
+
+    $('.sam').on('show.bs.modal', function () {
+        debugger;
+        $(this).find('.modal-body').css({
+            'max-height': '100%'
+        });
+    });
+
+    });
+    function popupmodal(elementid) {
+
+        $('#' + elementid).modal('show')
+    }
+
+
+
+</script>
+<div class="jumbotron col-md-12 col-lg-12 col-sm-12 col-xs-12 text-center" style="margin-top:20px;">
+    <h1 class=" col-md-12 col-lg-12 col-sm-12 col-xs-6 ">Welcome @User.Identity.Name </h1>
+</div>
+
+<div class="col-md-12 ">
+    @if (Model.Count > 0)
+    {
+        foreach (var file in Model)
+        {
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <video class="VideoPlayer" id=@file.Id onclick="popupmodal('modal@(file.Id)')" width="300" height="250" muted="muted">
+                    <source src="@Url.Content(@file.Path)" type="video/mp4" />
+                </video>
+                <span>@file.Name</span>
+                @if (Convert.ToInt32(this.Session["role_id"]) == 1)
+                {
+                    <span>
+                        <button type="button" title="Delete this File" class="btn btn-danger glyphicon glyphicon-trash" onclick="deleteFile(@file.Id)"></button>
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        @Ajax.ActionLink("Download", "DownloadFile", new { filename = file.Name }, null, new { @class = " btn btn-primary glyphicon glyphicon-download-alt " })
+                    </span>
+                }
+            </div>
+            <div class="modal fade sam" id="modal@(file.Id)" data-backdrop="static" role="dialog" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">@file.Name</h5>
+                            <button type="button" class="close vidpause" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body col-md-12 col-sm-12 col-xs-12">
+                            <video class="VideoPlayer" controls="true" width="1070" height="450">
+                                <source src="@Url.Content(@file.Path)" type="video/mp4" />
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
+<script>
+
+    function deleteFile(id) {
+        var deleteFileId = id;
+        var r = confirm("Are you sure want to delete");
+        if (r == true) {
+            $.ajax({
+                url: '/Home/DeleteFile',
+                type: 'post',
+                async: true,
+                data: { deleteId: deleteFileId },
+                success: function (response) {
+                    alert("File Sucessfully Deleted");
+                    location.reload()
+                },
+                error: function (error) {
+                    alert("Error Happened.Try again later.")
+                }
+            })
+        }
+        else {
+            return false;
+        }
+    }
+</script>
