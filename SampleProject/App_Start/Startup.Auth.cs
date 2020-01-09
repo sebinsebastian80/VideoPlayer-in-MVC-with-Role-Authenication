@@ -36,11 +36,11 @@ namespace SampleProject
             //app.UseFacebookAuthentication(    
             //  appId: "",    
             //  appSecret: "");    
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()    
-            //{    
-            //  ClientId = "",    
-            //  ClientSecret = ""    
-            //});    
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "529463520135-u7da15aludvbp70rk1r53k11mlplbtlk.apps.googleusercontent.com",
+                ClientSecret = "xevBk_O6k5V-62j0ve6eHoec"
+            });
         }
     }
 }
